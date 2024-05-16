@@ -23,7 +23,7 @@ class LostNotificationRequestRequest extends FormRequest
     {
         return [
 			'request_title' => 'required|string',
-			'user_id' => 'required',
+			'child_id' => 'required',
 			'notification_status' => 'string',
 			'comments' => 'string',
         ];

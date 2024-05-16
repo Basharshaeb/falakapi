@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tracking_child_master_details', function (Blueprint $table) {
+        Schema::create('location_histories', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('master_id');
-            $table->dateTime('date_time_loc');
-            $table->decimal('latitude')->nullable();
-            $table->decimal('longitude')->nullable();
-
+            $table->unsignedBigInteger('user_id');
+            $table->decimal('latitude');
+            $table->decimal('longitude');
+$table->string('source')->nullable();
+$table->dateTime('date_time');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tracking_child_master_details');
+        Schema::dropIfExists('location_histories');
     }
 };

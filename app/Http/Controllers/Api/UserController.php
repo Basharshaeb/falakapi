@@ -22,24 +22,18 @@ class UserController extends Controller
 
         $user=Auth::user();
         // $use=User::find($user)->with('children')->get();
-        $child['data']=$user->children;
-
-        // $followChild=new FollowChild();
-        // $followChild->user_id=Auth::user()->id;
-        // $followChild->child_id=$child->id;
-        // if($type=='barcode'){
-        //     $followChild->has_card='true';
-        // }
-        // if($type=='device'){
-        //     $followChild->track_by_device='true';
-        // }
-        // if($type=='app'){
-        //     $followChild->track_by_app='true';
-        // }
-        // $followChild->save();
-        //  $users = User::paginate();
+        $child=$user->children;
 
          return response()->json(['message'=>'','success'=>true,'data'=>$child]);
+     }
+     public function updateAllowToTrack(Request $request){
+
+        $childId= $request->child_id;
+        $userId=Auth::user()->id;
+        FollowChild::where('child_id',$childId)->where('user_id',$userId)->update(
+           [ 'allow_to_track'=>$request->value,]
+        );
+        return response()->json(['message'=> '','success'=>true,    'data'=>$childId]);
      }
 
      public function unlinkChild(Request $request)

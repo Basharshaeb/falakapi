@@ -68,7 +68,10 @@ use InteractsWithMedia;
 }
 public function children()
 {
-    return $this->hasMany(User::class, 'main_person_in_charge_id');
+    return $this->hasMany(User::class, 'main_person_in_charge_id')->with('followChild');
+}
+public function followChild(){
+    return $this->hasOne(FollowChild::class,'child_id','id');
 }
 // $admins = User::ofType('admin')->get();
 

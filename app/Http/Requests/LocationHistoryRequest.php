@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FindLostChildRequest extends FormRequest
+class LocationHistoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,12 @@ class FindLostChildRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'response_title' => 'string|required',
-			'response_image_path' => 'string',
-			'notification_status' => 'string',
-			'comments' => 'string',
+       'source'=>'string',
+            'latitude'=>'required',
+            'longitude'=>'required',
+            'city'=>'string',
+            'street'=>'string',
+            'country'=>'string',
         ];
     }
 }

@@ -25,6 +25,7 @@ class DeviceRequest extends FormRequest
 			'serial_number' => 'required|string',
 			'version' => 'required|string',
 			'device_battery' => 'required',
+            'child_id'=>'required',
         ];
     }
 }

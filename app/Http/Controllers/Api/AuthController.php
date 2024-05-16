@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Mail\Email;
-use App\Models\Student;
 use App\Models\User;
+use App\Models\FollowChild;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 // use Illuminate\Support\Str;
 
-use Ramsey\Uuid\Type\Integer;
+// use Ramsey\Uuid\Type\Integer;
 
 class AuthController extends Controller
 {
@@ -83,6 +83,8 @@ class AuthController extends Controller
             'username_type' => $request->username_type,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude  ,
+            'user_type' => 'parent'  ,
+
 
         ]);
         $randomString = $this->generateRandomSixDigitNumber();
@@ -96,12 +98,7 @@ class AuthController extends Controller
           'access_token' => $token,
             'message' => 'success Create Account',
             'success' => true,
-            'user' => [
-        'id' => $user->id,
-        'name' => $user->name,
-        'email' => $user->email,
-        'type' => $user->type,
-    ]]);
+            'user' =>  $user]);
     }
 
 
@@ -112,6 +109,7 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|string',
             'user_type' => 'required|string',
+            'year_of_birth' => 'required',
         ]);
 
 //        return  response()->json($request);
@@ -133,6 +131,7 @@ class AuthController extends Controller
             'phone' => $request->phone,
             'gender' => $request->gender,
             'username_type' => $request->username_type,
+            'user_type' => 'child',
             'latitude' => $request->latitude,
             'longitude' => $request->longitude  ,
             'main_image_path' => '' ,
@@ -140,6 +139,7 @@ class AuthController extends Controller
             'qr_code_link' => Str::uuid()->toString() ,
             'kinshipT' => $request->kinshipT ,
             'child_status' => 'active' ,
+            'year_of_birth' => $request->year_of_birth,
             // 'main_person_in_charge_id' => $request->kinshipT ,
 
         ]);
@@ -161,14 +161,91 @@ class AuthController extends Controller
           'access_token' => $token,
             'message' => 'success Create Account',
             'success' => true,
-            'user' => [
-        'id' => $user->id,
-        'name' => $user->name,
-        'email' => $user->email,
-        'type' => $user->type,
-    ]]);
+            'user' => $user]);
     }
 
+
+    public function createChildByParent(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|string',
+            'user_type' => 'required|string',
+            'year_of_birth' => 'required',
+            'gender' => 'required',
+            'kinshipT' => 'required',
+        ]);
+
+//        return  response()->json($request);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first(),
+                'success' => false,
+            ]);
+        }
+
+
+
+        $user= User::create([
+            'full_name' => $request->full_name,
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'username' => $request->username,
+            'fcm_token' => $request->fcm_token,
+            'phone' => $request->phone,
+            'gender' => $request->gender,
+            'username_type' => $request->username_type,
+            'user_type' => 'child',
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude  ,
+            'main_image_path' => '' ,
+            'qe_code_info' => Str::uuid()->toString() ,
+            'qr_code_link' => Str::uuid()->toString() ,
+            'kinshipT' => $request->kinshipT ,
+            'child_status' => 'active' ,
+            'year_of_birth' => $request->year_of_birth,
+            'main_person_in_charge_id' => Auth::user()->id,
+            'boundry' => $request->boundry,
+
+        ]);
+        if($request->has('image')){
+            $file= $request->image;
+            $hash = md5(time() . uniqid());
+            $newFileName = $hash . '.' . $file->getClientOriginalExtension();
+            $user->addMedia($file)->usingFileName($newFileName)->toMediaCollection('profile');
+            $user->main_image_path= $file;
+        }
+        $randomString = $this->generateRandomSixDigitNumber();
+        $user->verification_code=$randomString;
+        $user->save();
+        // Mail::to($user->email)->send(new Email($randomString));
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        $followChild=new FollowChild();
+        $followChild->user_id=Auth::user()->id;
+        $followChild->child_id=$user->id;
+        // if($type=='barcode'){
+        //     $followChild->has_card='true';
+        // }
+        // if($type=='device'){
+        //     $followChild->track_by_device='true';
+        // }
+        // if($type=='app'){
+            $followChild->track_by_app='true';
+        // }
+        $followChild->tracking_active_type='app';
+        $followChild->allow_to_track='true';
+        $followChild->save();
+
+
+        return response()->json(
+          [
+          'access_token' => $token,
+            'message' => 'success Create Account',
+            'success' => true,
+            'user' => $user]);
+    }
     public function login(Request $request): \Illuminate\Http\JsonResponse
     {
         $validator = Validator::make($request->all(), [
@@ -211,12 +288,7 @@ class AuthController extends Controller
             'access_token' => $token,
             'message' => '',
             'success' => true,
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'type' => $user->type,
-            ]
+            'user' =>$user,
         ]);
     }
     function generateRandomSixDigitNumber(): string

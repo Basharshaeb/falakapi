@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class FindLostChild extends Model
 {
-    
+
     protected $perPage = 20;
 
     /**
@@ -34,5 +34,8 @@ class FindLostChild extends Model
      */
     protected $fillable = ['response_title', 'helper_id', 'findLost_child_date', 'approximate_age', 'response_image_path', 'notification_status', 'comments', 'location_id'];
 
+    // public function user(){
+    //     return $this->hasOne(User::class);
+    // }
 
 }

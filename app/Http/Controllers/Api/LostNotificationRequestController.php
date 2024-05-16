@@ -8,6 +8,7 @@ use App\Http\Requests\LostNotificationRequestRequest;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LostNotificationRequestResource;
+use Illuminate\Support\Facades\Auth;
 
 class LostNotificationRequestController extends Controller
 {
@@ -16,7 +17,7 @@ class LostNotificationRequestController extends Controller
      */
     public function index(Request $request)
     {
-        $lostNotificationRequests = LostNotificationRequest::paginate();
+        $lostNotificationRequests = LostNotificationRequest::where('user_id',Auth::user()->id)->paginate();
 
         return LostNotificationRequestResource::collection($lostNotificationRequests);
     }
@@ -26,7 +27,8 @@ class LostNotificationRequestController extends Controller
      */
     public function store(LostNotificationRequestRequest $request): LostNotificationRequest
     {
-        return LostNotificationRequest::create($request->validated());
+
+        return LostNotificationRequest::create(array_merge($request->validated(),['user_id'=>Auth::user()->id]));
     }
 
     /**
