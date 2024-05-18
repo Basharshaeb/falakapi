@@ -25,15 +25,22 @@ use Illuminate\Database\Eloquent\Model;
  */
 class LostNotificationRequest extends Model
 {
-    
+
     protected $perPage = 20;
+    protected $with=['child','response'];
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    protected $fillable = ['request_title', 'user_id', 'child_id', 'request_lost_notification_date', 'last_location_id', 'notification_status', 'comments', 'last_response_by', 'found_by'];
+    protected $fillable = ['request_title', 'user_id', 'child_id', 'request_lost_notification_date', 'last_location_id', 'notification_status', 'comments', 'last_response_by', 'found_by','child_age','parent_phone','more_info','longitude','latitude'];
 
 
+    public function child(){
+        return $this->belongsTo(User::class,'child_id','id');
+    }
+    public function response(){
+        return $this->hasMany(LostNotificationResponse::class,'request_id','id');
+    }
 }

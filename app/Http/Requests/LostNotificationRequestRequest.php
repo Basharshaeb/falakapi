@@ -26,6 +26,9 @@ class LostNotificationRequestRequest extends FormRequest
 			'child_id' => 'required',
 			'notification_status' => 'string',
 			'comments' => 'string',
+			'more_info' => 'string',
+			'parent_phone' => 'string',
+			'child_age' => 'string',
         ];
     }
 }

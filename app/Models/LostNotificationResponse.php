@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class LostNotificationResponse extends Model
 {
-    
+
     protected $perPage = 20;
 
     /**
@@ -35,5 +35,11 @@ class LostNotificationResponse extends Model
      */
     protected $fillable = ['request_id', 'response_by_person_id', 'response_status', 'response_date', 'longitude', 'latitude', 'current_image_path', 'accuracy', 'comments'];
 
+    public function request(){
+        return $this->belongsTo(LostNotificationRequest::class,'request_id','id');
+    }
+    public function user(){
+        return $this->belongsTo(User::class,'response_by_person_id','id');
+    }
 
 }

@@ -65,7 +65,12 @@ class UserController extends Controller
      public function linkChild(Request $request)
      {
         $type=$request->link_type;
-        $child=User::where('id','=',$request->child_id)->get()->first();
+if(!empty($request->child_id)){
+    $child=User::where('id','=',$request->child_id)->get()->first();
+
+}if(!empty($request->barcode)){
+    $child=User::where('qe_code_info','=',$request->barcode)->get()->first();
+}
         $child->kinshipT=$request->kinshipT;
         $child->boundry=$request->boundry;
         $child->main_person_in_charge_id=Auth::user()->id;

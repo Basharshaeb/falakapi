@@ -23,6 +23,7 @@ Route::apiResource('find-lost-children', FindLostChildController::class);
 Route::apiResource('follow-children', FollowChildController::class);
 Route::apiResource('lost-notification-responses', LostNotificationResponseController::class);
 Route::apiResource('lost-notification-requests', LostNotificationRequestController::class)->middleware('auth:sanctum');;
+Route::get('nearby-requests',[ LostNotificationRequestController::class,'getByLocation'])->middleware('auth:sanctum');;
 Route::apiResource('users', UserController::class);
 Route::post('update-allow-track', [UserController::class,'updateAllowToTrack'])->middleware('auth:sanctum');
 
