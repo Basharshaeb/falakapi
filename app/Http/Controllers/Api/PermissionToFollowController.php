@@ -56,10 +56,21 @@ class PermissionToFollowController extends Controller
         return $permissionToFollow;
     }
 
-    public function destroy(PermissionToFollow $permissionToFollow): Response
-    {
-        $permissionToFollow->delete();
 
+    public function destroy($id): Response
+    {
+        // dd($id);
+        // $permissionToFollow->delete();
+return response()->json($id);
         return response()->noContent();
+    }
+    public function delete(Request $request, $id)
+    {
+        // dd($id);
+        // $permissionToFollow->delete();
+       $item= PermissionToFollow::where('child_id','=',$id)->where('to_person_id','=',Auth::user()->id);
+       $item->delete();
+return response()->json($item);
+        // return response()->noContent();
     }
 }

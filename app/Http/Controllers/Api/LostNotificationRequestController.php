@@ -121,4 +121,15 @@ $user=Auth::user();
 
         return response()->noContent();
     }
+    public function updateStatus(Request $request)
+    {
+        $LostNotification=LostNotificationRequest::where('id',$request->id)->get()->first();
+        if($LostNotification){
+            $LostNotification->notification_status=$request->status;
+            $LostNotification->save();
+        }
+        // $lostNotificationRequest->delete();
+
+        return response()->json($LostNotification);
+    }
 }
