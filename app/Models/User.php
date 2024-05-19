@@ -70,6 +70,15 @@ public function children()
 {
     return $this->hasMany(User::class, 'main_person_in_charge_id')->with('followChild');
 }
+
+public function followedChildren()
+{
+    return $this->hasMany(PermissionToFollow::class, 'to_person_id');
+}
+public function getFollowedChildIdsAttribute()
+{
+    return $this->followedChildren()->pluck('child_id')->toArray();
+}
 public function followChild(){
     return $this->hasOne(FollowChild::class,'child_id','id');
 }

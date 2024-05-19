@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\TrackingChildMasterController;
 use App\Http\Controllers\Api\TrackingChildMasterDetailController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\LocationHistoryController;
+use App\Http\Controllers\Api\PermissionToFollowController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -40,3 +41,4 @@ Route::apiResource('tracking-child-master-details', TrackingChildMasterDetailCon
 Route::post('login',[\App\Http\Controllers\api\AuthController::class,'login']);
 Route::post('register',[\App\Http\Controllers\api\AuthController::class,'register']);
 Route::post('register-child',[\App\Http\Controllers\api\AuthController::class,'registerChild']);
+Route::apiResource('permission-to-follows', PermissionToFollowController::class)->middleware('auth:sanctum');

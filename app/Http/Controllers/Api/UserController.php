@@ -9,6 +9,7 @@ use App\Http\Requests\UserRequest;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Models\PermissionToFollow;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -23,8 +24,9 @@ class UserController extends Controller
         $user=Auth::user();
         // $use=User::find($user)->with('children')->get();
         $child=$user->children;
-
-         return response()->json(['message'=>'','success'=>true,'data'=>$child]);
+$other=User::whereIn('id',$user->followed_child_ids)->get();
+        // $therChild=PermissionToFollow::where("to_person_id",$user->id);
+         return response()->json(['message'=>'','success'=>true,'data'=>$child,'other_children'=>$other]);
      }
      public function updateAllowToTrack(Request $request){
 
