@@ -222,9 +222,9 @@ class AuthController extends Controller
         // Mail::to($user->email)->send(new Email($randomString));
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        $followChild=new FollowChild();
-        $followChild->user_id=Auth::user()->id;
-        $followChild->child_id=$user->id;
+        // $followChild=new FollowChild();
+        // $followChild->user_id=Auth::user()->id;
+        // $followChild->child_id=$user->id;
         // if($type=='barcode'){
         //     $followChild->has_card='true';
         // }
@@ -232,11 +232,11 @@ class AuthController extends Controller
         //     $followChild->track_by_device='true';
         // }
         // if($type=='app'){
-            $followChild->track_by_app='true';
+            // $followChild->track_by_app='true';
         // }
-        $followChild->tracking_active_type='app';
-        $followChild->allow_to_track='true';
-        $followChild->save();
+        // $followChild->tracking_active_type='app';
+        // $followChild->allow_to_track='true';
+        // $followChild->save();
 
 
         return response()->json(
