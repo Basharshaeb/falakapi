@@ -42,17 +42,26 @@ class AuthController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->where('verification_code','=',$request->code)->first();
 
-        if (!$user || $user->verification_code !== $request->code) {
-            return response()->json(['message' => 'Invalid email or verification code', 'success' => false], 401);
-        }
+if($user){
+    $user->email_verified_at = now();
+    $user->save();
+    return response()->json(['message' => 'Email verified successfully',
+        'success' => true,  'user' =>  $user]);
+}else{
+    return response()->json(['message' => 'Invalid email or verification code', 'success' => false], 401);
 
-        $user->email_verified_at = now();
-        $user->save();
+}
+        // if (!$user || $user->verification_code !== $request->code) {
+        //     return response()->json(['message' => 'Invalid email or verification code', 'success' => false], 401);
+        // }
 
-        return response()->json(['message' => 'Email verified successfully',
-            'success' => true,  'user' =>  $user]);
+        // $user->email_verified_at = now();
+        // $user->save();
+
+        // return response()->json(['message' => 'Email verified successfully',
+            // 'success' => true,  'user' =>  $user]);
     }
     public function register(Request $request): \Illuminate\Http\JsonResponse
     {
