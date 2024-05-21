@@ -45,7 +45,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user || $user->verification_code !== $request->code) {
-            return response()->json(['message' => 'Invalid email or verification code', 'success' => true], 401);
+            return response()->json(['message' => 'Invalid email or verification code', 'success' => false], 401);
         }
 
         $user->email_verified_at = now();
