@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.2",
         "andreaselia/laravel-api-to-postman": "^2.0",
+        "guzzlehttp/guzzle": "^7.8",
         "kawankoding/laravel-fcm": "^0.2.9",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",

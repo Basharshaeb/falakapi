@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5bef2a1ac00d1e7b9382d3f16cac903a",
+    "content-hash": "e0337e675a91c29a629abfb051a2c51b",
     "packages": [
         {
             "name": "andreaselia/laravel-api-to-postman",
