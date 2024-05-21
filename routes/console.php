@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\Facades\DB;
 use GuzzleHttp\Client;
 use App\Models\LocationHistory;
-
+use App\Models\User;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote')->hourly();
@@ -29,6 +29,7 @@ Schedule::call(function () {
         $data = json_decode($response->getBody()->getContents(), true);
 
         // Save the sensor data to the database
+       
         $sensorData = new LocationHistory([
             'date_time' => now(),
             // 'temperature' => $data['temperature'][0]['value'],
@@ -41,6 +42,12 @@ Schedule::call(function () {
             // 'velocity' => $data['velocity'][0]['value'],
             // 'terminal_id' => $data['terminalID'][0]['value'],
         ]);
+        $user=User::find(2);
+        if($user){
+            $user->latitude=$sensorData->latitude;
+            $user->longitude=$sensorData->longitude;
+$user->save;
+        }
 
         $sensorData->save();
 
