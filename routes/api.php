@@ -46,3 +46,4 @@ Route::apiResource('permission-to-follows', PermissionToFollowController::class)
 Route::delete('permission-to-follow/delete/{id}', [PermissionToFollowController::class,'delete'])->middleware('auth:sanctum');
 
 Route::post('auth/verify-code',[\App\Http\Controllers\api\AuthController::class,'verify']);
+Route::post('get-child-by-Barcode',[\App\Http\Controllers\api\AuthController::class,'getByBarcode']);

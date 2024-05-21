@@ -63,6 +63,26 @@ if($user){
         // return response()->json(['message' => 'Email verified successfully',
             // 'success' => true,  'user' =>  $user]);
     }
+    public function getByBarcode(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'barcode' => 'required|string',
+            // 'code' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message'=>$validator->errors()->first(),'success'=>false], 422);
+        }
+
+
+        $user = User::with('parent')->where('qe_code_info','=',$request->barcode)->first();
+        if($user){
+            return response()->json(['message'=> '','success'=>true,'user'=> $user]);
+        }else{
+            return response()->json(['message'=> 'Child not Found','success'=>false]);
+
+        }
+    }
     public function register(Request $request): \Illuminate\Http\JsonResponse
     {
         $validator = Validator::make($request->all(), [
