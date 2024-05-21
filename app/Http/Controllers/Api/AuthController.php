@@ -52,7 +52,7 @@ class AuthController extends Controller
         $user->save();
 
         return response()->json(['message' => 'Email verified successfully',
-            'success' => true,]);
+            'success' => true,  'user' =>  $user]);
     }
     public function register(Request $request): \Illuminate\Http\JsonResponse
     {
@@ -90,7 +90,7 @@ class AuthController extends Controller
         $randomString = $this->generateRandomSixDigitNumber();
         $user->verification_code=$randomString;
         $user->save();
-        // Mail::to($user->email)->send(new Email($randomString));
+        Mail::to($user->email)->send(new Email($randomString,'كود التحفف','كود التحفف'));
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json(
@@ -219,6 +219,7 @@ class AuthController extends Controller
         $randomString = $this->generateRandomSixDigitNumber();
         $user->verification_code=$randomString;
         $user->save();
+
         // Mail::to($user->email)->send(new Email($randomString));
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -267,12 +268,13 @@ class AuthController extends Controller
         }
 //        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
+
 //            $token = $user->createToken($user->email)->plainTextToken;
             $randomString = $this->generateRandomSixDigitNumber();
             $user->verification_code=$randomString;
             $user->save();
             $subject="رمز التحقق الخاص بك هو ";
-            // Mail::to($user->email)->send(new Email($randomString,$subject,$subject));
+            Mail::to($user->email)->send(new Email($randomString,$subject,$subject));
 //            return response()->json([
 //                'code' => 200,
 //                'token' => $token,

@@ -44,3 +44,5 @@ Route::post('register',[\App\Http\Controllers\api\AuthController::class,'registe
 Route::post('register-child',[\App\Http\Controllers\api\AuthController::class,'registerChild']);
 Route::apiResource('permission-to-follows', PermissionToFollowController::class)->middleware('auth:sanctum');
 Route::delete('permission-to-follow/delete/{id}', [PermissionToFollowController::class,'delete'])->middleware('auth:sanctum');
+
+Route::post('auth/verify-code',[\App\Http\Controllers\api\AuthController::class,'verify']);
